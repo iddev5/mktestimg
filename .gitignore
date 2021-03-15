@@ -2,3 +2,7 @@ mktestimg
 *.png
 *.jpg
 *.bmp
+*.img
+
+*.swp
+*.swo
