@@ -1,10 +1,15 @@
-/* mktestimg 0.1.0 */
+/* mktestimg 0.1.1 */
 /* Copyright 2021 Ayush Bardhan Tripathy.
  * Licensed under MIT License. */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define MKTESTIMG_VERSION_MAJOR 0
+#define MKTESTIMG_VERSION_MINOR 1
+#define MKTESTIMG_VERSION_PATCH 1
+#define MKTESTIMG_VERSION_STR "0.1.1"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -21,18 +26,18 @@ char *copystr(const char *string) {
     long len = strlen(string); 
     char *out = malloc(sizeof(char) * (len + 1));
     strcpy(out, string); 
-    out[len + 1] = '\0';
+    out[len] = '\0';
     return out;
 }
 
 void usage(char *prog) {
-    printf("usage: %s -w <width> -h <height> [-f <format>] [-c <channels>] [-o] <output>\n", prog);
+    printf("usage: %s [-v] -w <width> -h <height> [-f <format>] [-c <channels>] [-o] <output>\n", prog);
     printf("width and height have to be non-zero. channels can be 3 or 4.\n");
     printf("available formats: png: %d, jpg: %d, bmp: %d\n", FORMAT_PNG, FORMAT_JPG, FORMAT_BMP);
 }
 
 int main(int argc, char **argv) {
-    if (argc < 4) {
+    if (argc < 3) {
         usage(argv[0]);
         return 0;
     }
@@ -40,8 +45,12 @@ int main(int argc, char **argv) {
     char *output = NULL; 
     int width = 0, height = 0, channels = 0, format = 0;
 
-    for (int i = 0; i < argc; i++) {
-        if (!strcmp(argv[i], "-w") && width == 0) {
+    for (int i = 1; i < argc; i++) {
+        if (!strcmp(argv[i], "-v")) {
+            printf("%s v%s\n", argv[0], MKTESTIMG_VERSION_STR);
+            return 0;
+        }
+        else if (!strcmp(argv[i], "-w") && width == 0) {
             width = atoi(argv[++i]);
         }
         else if (!strcmp(argv[i], "-h") && height == 0) {
@@ -61,6 +70,7 @@ int main(int argc, char **argv) {
             }
             else {
                 printf("unknown argument: %s\n", argv[i]);
+                usage(argv[0]);
                 return 0;
             }
         }
