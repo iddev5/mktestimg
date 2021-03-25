@@ -1,2 +1,2 @@
 #!/bin/sh
-gcc -o mktestimg mktestimg.c
+gcc -Wall -o mktestimg mktestimg.c
